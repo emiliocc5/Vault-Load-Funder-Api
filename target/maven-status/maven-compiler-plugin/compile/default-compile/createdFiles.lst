@@ -1,0 +1,4 @@
+com\vault\loadfunder\models\Input.class
+com\vault\loadfunder\LoadFunderApplication.class
+com\vault\loadfunder\controller\LoadFunderController.class
+com\vault\loadfunder\service\LoadFunderService.class
