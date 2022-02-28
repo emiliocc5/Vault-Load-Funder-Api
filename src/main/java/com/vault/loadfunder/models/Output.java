@@ -45,10 +45,10 @@ public class Output {
 
     @Override
     public String toString() {
-        return "Output{" +
-                "id='" + id + '\'' +
-                ", customerId='" + customerId + '\'' +
-                ", accepted=" + accepted +
+        return "{" +
+                "\"id\":\"" + id + "\"" +
+                ",\"customer_id\":\"" + customerId + "\"" +
+                ",\"accepted\":" + accepted +
                 '}';
     }
 }

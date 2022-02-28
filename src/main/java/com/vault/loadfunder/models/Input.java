@@ -1,7 +1,7 @@
 package com.vault.loadfunder.models;
 
 import com.google.gson.annotations.SerializedName;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Input {
     private String id;
@@ -12,7 +12,7 @@ public class Input {
     @SerializedName("load_amount")
     private String loadAmount;
 
-    private LocalDateTime time;
+    private ZonedDateTime time;
 
     public String getId() {
         return id;
@@ -38,11 +38,11 @@ public class Input {
         this.loadAmount = loadAmount;
     }
 
-    public LocalDateTime getTime() {
+    public ZonedDateTime getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(ZonedDateTime time) {
         this.time = time;
     }
 

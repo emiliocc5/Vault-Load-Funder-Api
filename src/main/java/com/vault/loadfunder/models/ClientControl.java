@@ -13,6 +13,7 @@ public class ClientControl {
 
     public ClientControl(Double weekAmount) {
         this.weekAmount = weekAmount;
+        this.dayAmount = (double) 0;
     }
 
     public Double getDayAmount() {
@@ -37,5 +38,14 @@ public class ClientControl {
 
     public void setDayLoads(int dayLoads) {
         this.dayLoads = dayLoads;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientControl{" +
+                "dayAmount=" + dayAmount +
+                ", dayLoads=" + dayLoads +
+                ", weekAmount=" + weekAmount +
+                '}';
     }
 }
