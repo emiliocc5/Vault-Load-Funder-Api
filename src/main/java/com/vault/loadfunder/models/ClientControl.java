@@ -1,19 +1,19 @@
 package com.vault.loadfunder.models;
 
 public class ClientControl {
+
     private Double dayAmount;
     private int dayLoads;
     private Double weekAmount;
+    private int lastOperationDay;
+    private int lastOperationWeek;
 
-    public ClientControl(Double dayAmount, int dayLoads, Double weekAmount) {
+    public ClientControl(Double dayAmount, int dayLoads, Double weekAmount, int lastOperationDay, int lastOperationWeek) {
         this.dayAmount = dayAmount;
         this.dayLoads = dayLoads;
         this.weekAmount = weekAmount;
-    }
-
-    public ClientControl(Double weekAmount) {
-        this.weekAmount = weekAmount;
-        this.dayAmount = (double) 0;
+        this.lastOperationDay = lastOperationDay;
+        this.lastOperationWeek = lastOperationWeek;
     }
 
     public Double getDayAmount() {
@@ -24,14 +24,6 @@ public class ClientControl {
         this.dayAmount = dayAmount;
     }
 
-    public Double getWeekAmount() {
-        return weekAmount;
-    }
-
-    public void setWeekAmount(Double weekAmount) {
-        this.weekAmount = weekAmount;
-    }
-
     public int getDayLoads() {
         return dayLoads;
     }
@@ -40,12 +32,27 @@ public class ClientControl {
         this.dayLoads = dayLoads;
     }
 
-    @Override
-    public String toString() {
-        return "ClientControl{" +
-                "dayAmount=" + dayAmount +
-                ", dayLoads=" + dayLoads +
-                ", weekAmount=" + weekAmount +
-                '}';
+    public Double getWeekAmount() {
+        return weekAmount;
+    }
+
+    public void setWeekAmount(Double weekAmount) {
+        this.weekAmount = weekAmount;
+    }
+
+    public int getLastOperationDay() {
+        return lastOperationDay;
+    }
+
+    public void setLastOperationDay(int lastOperationDay) {
+        this.lastOperationDay = lastOperationDay;
+    }
+
+    public int getLastOperationWeek() {
+        return lastOperationWeek;
+    }
+
+    public void setLastOperationWeek(int lastOperationWeek) {
+        this.lastOperationWeek = lastOperationWeek;
     }
 }

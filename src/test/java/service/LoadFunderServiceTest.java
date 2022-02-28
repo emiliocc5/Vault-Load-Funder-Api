@@ -2,7 +2,7 @@ package service;
 
 import com.vault.loadfunder.models.Input;
 import com.vault.loadfunder.models.Output;
-import com.vault.loadfunder.service.LoadFunderService;
+import com.vault.loadfunder.services.loadfunder.LoadFunderServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class LoadFunderServiceTest {
 
-    private LoadFunderService loadFunderService;
+    private LoadFunderServiceImpl loadFunderService;
 
     @BeforeEach
     public void setUp() {
-        loadFunderService = new LoadFunderService();
+        loadFunderService = new LoadFunderServiceImpl();
     }
 
     @Test

@@ -2,7 +2,9 @@ package com.vault.loadfunder.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Output {
+import java.io.Serializable;
+
+public class Output implements Serializable {
     private String id;
 
     @SerializedName("customer_id")
