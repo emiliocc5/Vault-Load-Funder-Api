@@ -6,11 +6,11 @@ public class ClientControl {
 
     private BigDecimal dayAmount;
     private int dayLoads;
-    private Double weekAmount;
+    private BigDecimal weekAmount;
     private int lastOperationDay;
     private int lastOperationWeek;
 
-    public ClientControl(BigDecimal dayAmount, int dayLoads, Double weekAmount, int lastOperationDay, int lastOperationWeek) {
+    public ClientControl(BigDecimal dayAmount, int dayLoads, BigDecimal weekAmount, int lastOperationDay, int lastOperationWeek) {
         this.dayAmount = dayAmount;
         this.dayLoads = dayLoads;
         this.weekAmount = weekAmount;
@@ -34,11 +34,11 @@ public class ClientControl {
         this.dayLoads = dayLoads;
     }
 
-    public Double getWeekAmount() {
+    public BigDecimal getWeekAmount() {
         return weekAmount;
     }
 
-    public void setWeekAmount(Double weekAmount) {
+    public void setWeekAmount(BigDecimal weekAmount) {
         this.weekAmount = weekAmount;
     }
 

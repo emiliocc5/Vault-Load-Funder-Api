@@ -33,9 +33,9 @@ public class LoadFunderServiceImpl implements LoadFunderService {
 
     private void checkPreviousMovementsForClient(Map<String, ClientControl> clientControl, Input actualClient, List<Output> outputList) {
         if (!clientControl.containsKey(actualClient.getCustomerId())) {
-            ClientControl newClient = new ClientControl(new BigDecimal(removeSymbol(actualClient.getLoadAmount())),
+            ClientControl newClient = new ClientControl(getLoadAmount(actualClient),
                     1,
-                    Double.parseDouble(removeSymbol(actualClient.getLoadAmount())),
+                    getLoadAmount(actualClient),
                     actualClient.getTime().getDayOfMonth(),
                     actualClient.getTime().get(weekOfTheYearFormat));
             clientControl.put(actualClient.getCustomerId(), newClient);
@@ -48,44 +48,44 @@ public class LoadFunderServiceImpl implements LoadFunderService {
     private void checkInExistentTransactions(Map<String, ClientControl> clientControl, Input actualClient, List<Output> outputList) {
         ClientControl clientInMap = clientControl.get(actualClient.getCustomerId());
         if (actualClient.getTime().getDayOfMonth() == clientInMap.getLastOperationDay()) {
-            if (clientInMap.getDayAmount().add(new BigDecimal(removeSymbol(actualClient.getLoadAmount()))).compareTo(new BigDecimal(5000)) > 0 ||
+            if (clientInMap.getDayAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(5000)) > 0 ||
                     clientInMap.getDayLoads() > 3 ||
-                    clientInMap.getWeekAmount() + Double.parseDouble(removeSymbol(actualClient.getLoadAmount())) > 20000) {
+                    clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
                 addOutput(actualClient, Boolean.FALSE, outputList);
             } else {
-                replaceClientInControlMap(clientInMap.getDayAmount().add(getAmount(actualClient.getLoadAmount())),
+                replaceClientInControlMap(clientInMap.getDayAmount().add(getLoadAmount(actualClient)),
                         clientInMap.getDayLoads() + 1,
-                        clientInMap.getWeekAmount() + Double.parseDouble(removeSymbol(actualClient.getLoadAmount())),
+                        clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
                         actualClient, clientControl);
                 addOutput(actualClient, Boolean.TRUE, outputList);
             }
         } else {
-            replaceClientInControlMap(getAmount(actualClient.getLoadAmount()), 1,
-                    clientInMap.getWeekAmount() + Double.parseDouble(removeSymbol(actualClient.getLoadAmount())),
+            replaceClientInControlMap(getLoadAmount(actualClient), 1,
+                    clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
                     actualClient, clientControl);
             if (actualClient.getTime().get(weekOfTheYearFormat) == clientInMap.getLastOperationWeek()) {
-                if (clientInMap.getWeekAmount() + Double.parseDouble(removeSymbol(actualClient.getLoadAmount())) > 20000) {
+                if (clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
                     addOutput(actualClient, Boolean.FALSE, outputList);
                 } else {
-                    replaceClientInControlMap(getAmount(actualClient.getLoadAmount()), 1,
-                            clientInMap.getWeekAmount() + Double.parseDouble(removeSymbol(actualClient.getLoadAmount())),
+                    replaceClientInControlMap(getLoadAmount(actualClient), 1,
+                            clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
                             actualClient, clientControl);
                     addOutput(actualClient, Boolean.TRUE, outputList);
                 }
             } else {
-                replaceClientInControlMap(getAmount(actualClient.getLoadAmount()),
-                        1, Double.parseDouble(removeSymbol(actualClient.getLoadAmount())),
+                replaceClientInControlMap(getLoadAmount(actualClient),
+                        1, getLoadAmount(actualClient),
                         actualClient, clientControl);
                 addOutput(actualClient, Boolean.TRUE, outputList);
             }
         }
     }
 
-    private BigDecimal getAmount(String loadAmount) {
-        return new BigDecimal(removeSymbol(loadAmount));
+    private BigDecimal getLoadAmount(Input actualClient) {
+        return new BigDecimal(removeSymbol(actualClient.getLoadAmount()));
     }
 
-    private void replaceClientInControlMap(BigDecimal newDayAmount, int newDayLoad, Double newWeekAmount, Input actualClient, Map<String, ClientControl> clientControl) {
+    private void replaceClientInControlMap(BigDecimal newDayAmount, int newDayLoad, BigDecimal newWeekAmount, Input actualClient, Map<String, ClientControl> clientControl) {
         ClientControl clientActualized = new ClientControl(newDayAmount, newDayLoad, newWeekAmount,
                 actualClient.getTime().getDayOfMonth(),
                 actualClient.getTime().get(weekOfTheYearFormat));
