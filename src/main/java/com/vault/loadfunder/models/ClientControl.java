@@ -1,14 +1,16 @@
 package com.vault.loadfunder.models;
 
+import java.math.BigDecimal;
+
 public class ClientControl {
 
-    private Double dayAmount;
+    private BigDecimal dayAmount;
     private int dayLoads;
     private Double weekAmount;
     private int lastOperationDay;
     private int lastOperationWeek;
 
-    public ClientControl(Double dayAmount, int dayLoads, Double weekAmount, int lastOperationDay, int lastOperationWeek) {
+    public ClientControl(BigDecimal dayAmount, int dayLoads, Double weekAmount, int lastOperationDay, int lastOperationWeek) {
         this.dayAmount = dayAmount;
         this.dayLoads = dayLoads;
         this.weekAmount = weekAmount;
@@ -16,11 +18,11 @@ public class ClientControl {
         this.lastOperationWeek = lastOperationWeek;
     }
 
-    public Double getDayAmount() {
+    public BigDecimal getDayAmount() {
         return dayAmount;
     }
 
-    public void setDayAmount(Double dayAmount) {
+    public void setDayAmount(BigDecimal dayAmount) {
         this.dayAmount = dayAmount;
     }
 

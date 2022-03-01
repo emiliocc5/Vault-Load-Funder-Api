@@ -28,17 +28,12 @@ public class FileUtilsServiceImpl implements FileUtilsService {
     public List<Input> getInputsFromFile(MultipartFile file) {
         List<Input> inputList = new ArrayList<>();
         Gson g = getGsonBuilder();
-
         try {
             InputStream inputStream = file.getInputStream();
             List<String> linesList = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                     .lines().collect(Collectors.toList());
-
-            //linesList.forEach(x -> inputList.add(g.fromJson(x, Input.class)));
-
             for (String s : linesList) {
                 Input input = g.fromJson(s, Input.class);
-                //TODO THIS LOGIC GOES INTO LOADFUNDER SERVICE
                 if (inputList.stream().noneMatch(x -> x.getId().equals(input.getId()) && x.getCustomerId().equals(input.getCustomerId()))) {
                     inputList.add(input);
                 }
