@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 public class LoadFunderController {
 
@@ -25,7 +23,7 @@ public class LoadFunderController {
     }
 
     @PostMapping("/load-funder")
-    public ResponseEntity<Resource> loadFunder(@RequestParam(value = "file") MultipartFile inputFile) throws IOException {
+    public ResponseEntity<Resource> loadFunder(@RequestParam(value = "file") MultipartFile inputFile)  {
 
         ByteArrayResource output = fileUtilsService.getOutputFromList(
                 loadFunderService.loadFunder(fileUtilsService.getInputsFromFile(inputFile)));

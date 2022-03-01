@@ -48,36 +48,44 @@ public class LoadFunderServiceImpl implements LoadFunderService {
     private void checkInExistentTransactions(Map<String, ClientControl> clientControl, Input actualClient, List<Output> outputList) {
         ClientControl clientInMap = clientControl.get(actualClient.getCustomerId());
         if (actualClient.getTime().getDayOfMonth() == clientInMap.getLastOperationDay()) {
-            if (clientInMap.getDayAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(5000)) > 0 ||
-                    clientInMap.getDayLoads() > 3 ||
-                    clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
-                addOutput(actualClient, Boolean.FALSE, outputList);
-            } else {
-                replaceClientInControlMap(clientInMap.getDayAmount().add(getLoadAmount(actualClient)),
-                        clientInMap.getDayLoads() + 1,
-                        clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
-                        actualClient, clientControl);
-                addOutput(actualClient, Boolean.TRUE, outputList);
-            }
+            checkDayAndWeekControls(clientInMap, actualClient, clientControl, outputList);
         } else {
             replaceClientInControlMap(getLoadAmount(actualClient), 1,
                     clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
                     actualClient, clientControl);
             if (actualClient.getTime().get(weekOfTheYearFormat) == clientInMap.getLastOperationWeek()) {
-                if (clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
-                    addOutput(actualClient, Boolean.FALSE, outputList);
-                } else {
-                    replaceClientInControlMap(getLoadAmount(actualClient), 1,
-                            clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
-                            actualClient, clientControl);
-                    addOutput(actualClient, Boolean.TRUE, outputList);
-                }
+                checkWeekControl(clientInMap, actualClient, clientControl, outputList);
             } else {
                 replaceClientInControlMap(getLoadAmount(actualClient),
                         1, getLoadAmount(actualClient),
                         actualClient, clientControl);
                 addOutput(actualClient, Boolean.TRUE, outputList);
             }
+        }
+    }
+
+    private void checkDayAndWeekControls(ClientControl clientInMap, Input actualClient, Map<String, ClientControl> clientControl, List<Output> outputList) {
+        if (clientInMap.getDayAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(5000)) > 0 ||
+                clientInMap.getDayLoads() > 3 ||
+                clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
+            addOutput(actualClient, Boolean.FALSE, outputList);
+        } else {
+            replaceClientInControlMap(clientInMap.getDayAmount().add(getLoadAmount(actualClient)),
+                    clientInMap.getDayLoads() + 1,
+                    clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
+                    actualClient, clientControl);
+            addOutput(actualClient, Boolean.TRUE, outputList);
+        }
+    }
+
+    private void checkWeekControl(ClientControl clientInMap, Input actualClient, Map<String, ClientControl> clientControl, List<Output> outputList){
+        if (clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
+            addOutput(actualClient, Boolean.FALSE, outputList);
+        } else {
+            replaceClientInControlMap(getLoadAmount(actualClient), 1,
+                    clientInMap.getWeekAmount().add(getLoadAmount(actualClient)),
+                    actualClient, clientControl);
+            addOutput(actualClient, Boolean.TRUE, outputList);
         }
     }
 
@@ -98,7 +106,10 @@ public class LoadFunderServiceImpl implements LoadFunderService {
     }
 
     private String removeSymbol(String amount) {
-        return amount.substring(1);
+        if (amount != null && amount.contains("$")) {
+            amount = amount.replace("$", "");
+        }
+        return amount;
     }
 
 }

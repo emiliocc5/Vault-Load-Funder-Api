@@ -15,15 +15,4 @@ class LoadFunderApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
-	@Test
-	public void test() throws ParseException {
-		DecimalFormat format = new DecimalFormat("\u00A4####.00");
-		format.setParseBigDecimal(true);
-
-		BigDecimal decimal = (BigDecimal) format.parse("$1000.57");
-		System.out.println(decimal);
-
-	}
-
 }
