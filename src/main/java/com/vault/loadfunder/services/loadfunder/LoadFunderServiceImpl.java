@@ -5,15 +5,17 @@ import com.vault.loadfunder.models.ClientControl;
 import com.vault.loadfunder.models.Input;
 import com.vault.loadfunder.models.Output;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
-
 @Service
 public class LoadFunderServiceImpl implements LoadFunderService {
+
+    private static final BigDecimal DAILY_MAX = new BigDecimal(5000);
+    private static final BigDecimal WEEKLY_MAX = new BigDecimal(20000);
+    private static final int DAILY_LOAD_MAX = 3;
 
     private final TemporalField weekOfTheYearFormat = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
 
@@ -22,7 +24,7 @@ public class LoadFunderServiceImpl implements LoadFunderService {
         Map<String, ClientControl> clientControl = new HashMap<>();
 
         for (Input i : inputList) {
-            if (Double.parseDouble(removeSymbol(i.getLoadAmount())) > 5000) {
+            if (getLoadAmount(i).compareTo(DAILY_MAX) > 0) {
                 addOutput(i, Boolean.FALSE, outputList);
                 continue;
             }
@@ -65,9 +67,9 @@ public class LoadFunderServiceImpl implements LoadFunderService {
     }
 
     private void checkDayAndWeekControls(ClientControl clientInMap, Input actualClient, Map<String, ClientControl> clientControl, List<Output> outputList) {
-        if (clientInMap.getDayAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(5000)) > 0 ||
-                clientInMap.getDayLoads() > 3 ||
-                clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
+        if (clientInMap.getDayAmount().add(getLoadAmount(actualClient)).compareTo(DAILY_MAX) > 0 ||
+                clientInMap.getDayLoads() > DAILY_LOAD_MAX ||
+                clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(WEEKLY_MAX) > 0) {
             addOutput(actualClient, Boolean.FALSE, outputList);
         } else {
             replaceClientInControlMap(clientInMap.getDayAmount().add(getLoadAmount(actualClient)),
@@ -79,7 +81,7 @@ public class LoadFunderServiceImpl implements LoadFunderService {
     }
 
     private void checkWeekControl(ClientControl clientInMap, Input actualClient, Map<String, ClientControl> clientControl, List<Output> outputList){
-        if (clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(new BigDecimal(20000)) > 0) {
+        if (clientInMap.getWeekAmount().add(getLoadAmount(actualClient)).compareTo(WEEKLY_MAX) > 0) {
             addOutput(actualClient, Boolean.FALSE, outputList);
         } else {
             replaceClientInControlMap(getLoadAmount(actualClient), 1,
