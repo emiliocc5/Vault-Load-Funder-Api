@@ -22,6 +22,8 @@ public class Output implements Serializable {
         return id;
     }
 
+    public String getCustomerId() { return customerId; }
+
     public boolean isAccepted() {
         return accepted;
     }
